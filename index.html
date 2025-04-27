@@ -3,309 +3,183 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ultimate Focus Mixer 🎶</title>
+  <title>Fancy Sound Mixer</title>
   <style>
-    :root {
-      --bg-color: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
-      --card-bg: rgba(255, 255, 255, 0.8);
-      --text-color: #333;
-      --button-bg: linear-gradient(315deg, #6a11cb 0%, #2575fc 74%);
-      --button-hover: linear-gradient(315deg, #2575fc 0%, #6a11cb 74%);
-    }
-    [data-theme="dark"] {
-      --bg-color: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      --card-bg: rgba(20, 20, 20, 0.8);
-      --text-color: #eee;
-      --button-bg: linear-gradient(315deg, #ff4e50 0%, #f9d423 74%);
-      --button-hover: linear-gradient(315deg, #f9d423 0%, #ff4e50 74%);
-    }
-
     body {
       margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      background: var(--bg-color);
       font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+      color: white;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
+      min-height: 100vh;
       overflow-x: hidden;
-      color: var(--text-color);
-      transition: background 0.5s, color 0.5s;
     }
-
     header {
+      padding: 1rem;
       text-align: center;
-      margin-top: 30px;
-      animation: fadeIn 1s ease forwards;
+      font-size: 2rem;
+      background: #111;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
-
-    header h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
-    }
-
-    header p {
-      font-size: 1.2rem;
-      color: var(--text-color);
-    }
-
     .controls {
-      margin: 20px 0;
       display: flex;
-      gap: 20px;
-      align-items: center;
-      flex-wrap: wrap;
       justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      gap: 1rem;
     }
-
-    .mixer {
-      margin-top: 20px;
+    .controls button, .controls input[type=range] {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #mixer {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      width: 90%;
-      max-width: 1500px;
-      animation: fadeInUp 1.2s ease forwards;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+      flex-grow: 1;
     }
-
     .sound {
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      padding: 25px;
+      background: rgba(255,255,255,0.05);
+      padding: 1rem;
       border-radius: 20px;
       text-align: center;
-      transition: transform 0.3s, background 0.3s;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      position: relative;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
     }
-
     .sound:hover {
-      transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.9);
+      transform: scale(1.05);
     }
-
-    .sound h3 {
-      margin-bottom: 15px;
-    }
-
-    .icon {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      animation: float 2s infinite ease-in-out;
-    }
-
-    button {
-      background: var(--button-bg);
-      color: white;
-      border: none;
-      padding: 10px 25px;
-      border-radius: 30px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background: var(--button-hover);
-    }
-
-    .volume, .master-volume {
+    .sound button {
+      margin-top: 0.5rem;
       width: 80%;
-      margin-top: 15px;
+      background: #4CAF50;
+      color: white;
+      font-size: 1rem;
     }
-
-    .now-playing {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: var(--text-color);
-      min-height: 20px;
+    .sound .icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
     }
-
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      height: 6px;
-      background: #ccc;
-      border-radius: 5px;
-      outline: none;
+    .sound input[type=range] {
+      width: 80%;
+      margin-top: 0.5rem;
     }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      background: #6a11cb;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: background 0.3s;
+    [data-theme="dark"] {
+      background: linear-gradient(135deg, #0f0f1f, #1a1a30);
+      color: #ddd;
     }
-
-    input[type="range"]::-webkit-slider-thumb:hover {
-      background: #2575fc;
-    }
-
-    .theme-toggle {
-      background: transparent;
-      border: 2px solid var(--text-color);
-      padding: 8px 20px;
-      border-radius: 30px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-      color: var(--text-color);
-    }
-
-    .theme-toggle:hover {
-      background: var(--text-color);
-      color: #fff;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-
-    @keyframes fadeInUp {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    @keyframes float {
-      0%, 100% {transform: translateY(0);}
-      50% {transform: translateY(-5px);}
+    [data-theme="dark"] header {
+      background: #000;
     }
   </style>
 </head>
 
 <body>
+  <header>🎶 Fancy Sound Mixer</header>
 
-<header>
-  <h1>Ultimate Focus Mixer 🎶</h1>
-  <p>Create your perfect ambient soundscape.</p>
-</header>
+  <div class="controls">
+    <button onclick="toggleTheme()">🌗 Toggle Dark/Light</button>
+    <input type="range" min="0" max="1" step="0.01" value="0.5" oninput="setMasterVolume(this.value)">
+  </div>
 
-<div class="controls">
-  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme 🌗</button>
-  <input type="range" min="0" max="1" step="0.01" value="0.5" class="master-volume" onchange="setMasterVolume(this.value)">
-</div>
+  <div id="mixer"></div>
 
-<div class="mixer" id="mixer">
-  <!-- All the sounds will be generated here by JavaScript -->
-</div>
+  <script>
+    const sounds = [
+      { name: "Rain", icon: "🌧️", src: "https://cdn.pixabay.com/audio/2022/03/15/audio_c506c4b97b.mp3" },
+      { name: "Waves", icon: "🌊", src: "https://cdn.pixabay.com/audio/2022/09/01/audio_04ed7b8ad1.mp3" },
+      { name: "Birds", icon: "🐦", src: "https://cdn.pixabay.com/audio/2022/03/31/audio_ee1884f0cf.mp3" },
+      { name: "Fireplace", icon: "🔥", src: "https://cdn.pixabay.com/audio/2022/03/03/audio_9e2362b9e7.mp3" },
+      { name: "Wind", icon: "💨", src: "https://cdn.pixabay.com/audio/2021/12/15/audio_2b7d70f2ed.mp3" },
+      { name: "Thunder", icon: "⚡", src: "https://cdn.pixabay.com/audio/2022/03/14/audio_52d640e99f.mp3" },
+      { name: "Night Crickets", icon: "🦗", src: "https://cdn.pixabay.com/audio/2021/10/29/audio_8b6d3ab64b.mp3" },
+      { name: "Chimes", icon: "🔔", src: "https://cdn.pixabay.com/audio/2022/01/23/audio_4e08cbb2c8.mp3" },
+      { name: "River", icon: "🏞️", src: "https://cdn.pixabay.com/audio/2022/06/13/audio_5d1c6b88ad.mp3" },
+      { name: "Forest", icon: "🌳", src: "https://cdn.pixabay.com/audio/2021/11/30/audio_d159c2d950.mp3" },
+      { name: "City Street", icon: "🚦", src: "https://cdn.pixabay.com/audio/2021/08/09/audio_65b36c99ca.mp3" },
+      { name: "Typing", icon: "⌨️", src: "https://cdn.pixabay.com/audio/2021/12/15/audio_9a5a2289ef.mp3" },
+      { name: "Café", icon: "☕", src: "https://cdn.pixabay.com/audio/2021/08/08/audio_a4b4bdb6cc.mp3" },
+      { name: "Underwater", icon: "🐠", src: "https://cdn.pixabay.com/audio/2022/02/23/audio_f01a6cb35d.mp3" },
+      { name: "Train", icon: "🚂", src: "https://cdn.pixabay.com/audio/2022/03/17/audio_f7d2b79a43.mp3" },
+      { name: "Fountain", icon: "⛲", src: "https://cdn.pixabay.com/audio/2022/03/09/audio_82595ccbbd.mp3" },
+      { name: "Heartbeat", icon: "❤️", src: "https://cdn.pixabay.com/audio/2022/01/21/audio_345dc2b3e1.mp3" },
+      { name: "Clock", icon: "🕰️", src: "https://cdn.pixabay.com/audio/2022/02/03/audio_4e4027ed12.mp3" },
+      { name: "Snowstorm", icon: "❄️", src: "https://cdn.pixabay.com/audio/2022/01/23/audio_f661b6c6c6.mp3" },
+      { name: "Fireworks", icon: "🎆", src: "https://cdn.pixabay.com/audio/2022/02/06/audio_7b837ee234.mp3" }
+    ];
 
-<script>
-const sounds = [
-  { name: "Rain", icon: "🌧️", src: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c506c4b97b.mp3" },
-  { name: "Thunderstorm", icon: "⛈️", src: "https://cdn.pixabay.com/download/audio/2022/02/22/audio_6455c8d53e.mp3" },
-  { name: "Forest Birds", icon: "🐦", src: "https://cdn.pixabay.com/download/audio/2021/09/20/audio_b7f8fb31df.mp3" },
-  { name: "Campfire", icon: "🔥", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_5e4d5eb2c8.mp3" },
-  { name: "Ocean Waves", icon: "🌊", src: "https://cdn.pixabay.com/download/audio/2021/09/30/audio_5fcd6e5c7a.mp3" },
-  { name: "Wind Blowing", icon: "💨", src: "https://cdn.pixabay.com/download/audio/2022/07/16/audio_b57a97dc0b.mp3" },
-  { name: "River Stream", icon: "🏞️", src: "https://cdn.pixabay.com/download/audio/2022/03/23/audio_c2d556d0b8.mp3" },
-  { name: "Birdsong Morning", icon: "🌄", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_616923b9aa.mp3" },
-  { name: "Cafe Chatter", icon: "☕", src: "https://cdn.pixabay.com/download/audio/2022/04/06/audio_b0162e0ee8.mp3" },
-  { name: "Typing Keyboard", icon: "⌨️", src: "https://cdn.pixabay.com/download/audio/2022/10/07/audio_33058d7d93.mp3" },
-  { name: "City Streets", icon: "🚦", src: "https://cdn.pixabay.com/download/audio/2022/01/19/audio_2f23e50709.mp3" },
-  { name: "Train Ride", icon: "🚂", src: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_2f26c13833.mp3" },
-  { name: "Subway", icon: "🚇", src: "https://cdn.pixabay.com/download/audio/2022/05/04/audio_650ec7b50b.mp3" },
-  { name: "Wind Chimes", icon: "🔔", src: "https://cdn.pixabay.com/download/audio/2022/03/19/audio_2e0105d01d.mp3" },
-  { name: "Clock Ticking", icon: "🕰️", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_9c458e4c7e.mp3" },
-  { name: "Meditation Bells", icon: "🧘", src: "https://cdn.pixabay.com/download/audio/2022/03/19/audio_a6c57d4a18.mp3" },
-  { name: "Chanting", icon: "🙏", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_6cb278e41e.mp3" },
-  { name: "Cave Drips", icon: "🕳️", src: "https://cdn.pixabay.com/download/audio/2022/07/24/audio_604d1f7b58.mp3" },
-  { name: "Fireplace", icon: "🪵", src: "https://cdn.pixabay.com/download/audio/2021/09/18/audio_816ed719c5.mp3" },
-  { name: "Leaves Rustling", icon: "🍂", src: "https://cdn.pixabay.com/download/audio/2021/09/10/audio_b9d4b048d4.mp3" },
-  { name: "Soft Wind", icon: "🌬️", src: "https://cdn.pixabay.com/download/audio/2022/02/22/audio_c7f3c67c1e.mp3" },
-  { name: "Bubbling Water", icon: "🫧", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_1b7ba769f6.mp3" },
-  { name: "Jungle Sounds", icon: "🦜", src: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_c77b2e4953.mp3" },
-  { name: "Mountain Wind", icon: "🏔️", src: "https://cdn.pixabay.com/download/audio/2022/06/14/audio_b1eac5c2b3.mp3" },
-  { name: "Aurora Ambience", icon: "🌌", src: "https://cdn.pixabay.com/download/audio/2021/09/20/audio_b927c13c34.mp3" },
-  { name: "Seagulls", icon: "🕊️", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_503f77c3e5.mp3" },
-  { name: "Farm Morning", icon: "🌾", src: "https://cdn.pixabay.com/download/audio/2021/10/28/audio_dcf11fba0e.mp3" },
-  { name: "Tropical Rain", icon: "🌴", src: "https://cdn.pixabay.com/download/audio/2022/01/19/audio_6b84d6c48f.mp3" },
-  { name: "Underwater", icon: "🐠", src: "https://cdn.pixabay.com/download/audio/2022/01/19/audio_c3d3c00411.mp3" },
-  { name: "Deep Cave", icon: "🕳️", src: "https://cdn.pixabay.com/download/audio/2022/06/14/audio_437c7476f6.mp3" }
-];
+    let masterVolume = 0.5;
 
-let masterVolume = 0.5;
+    function createSoundCard(sound) {
+      const card = document.createElement('div');
+      card.className = 'sound';
 
-function createSoundCard(sound) {
-  const card = document.createElement('div');
-  card.className = 'sound';
-  
-  const icon = document.createElement('div');
-  icon.className = 'icon';
-  icon.textContent = sound.icon;
-  
-  const title = document.createElement('h3');
-  title.textContent = sound.name;
-  
-  const button = document.createElement('button');
-  button.textContent = 'Play';
-  
-  const volume = document.createElement('input');
-  volume.type = 'range';
-  volume.min = '0';
-  volume.max = '1';
-  volume.step = '0.01';
-  volume.value = '0.5';
-  volume.className = 'volume';
+      const icon = document.createElement('div');
+      icon.className = 'icon';
+      icon.textContent = sound.icon;
 
-  const nowPlaying = document.createElement('div');
-  nowPlaying.className = 'now-playing';
+      const title = document.createElement('h3');
+      title.textContent = sound.name;
 
-  const audio = new Audio(sound.src);
-  audio.loop = true;
-  audio.volume = 0.5 * masterVolume;
-
-  button.onclick = () => {
-    if (audio.paused) {
-      audio.play();
-      button.textContent = 'Pause';
-      nowPlaying.textContent = 'Playing...';
-    } else {
-      audio.pause();
+      const button = document.createElement('button');
       button.textContent = 'Play';
-      nowPlaying.textContent = '';
+
+      const volume = document.createElement('input');
+      volume.type = 'range';
+      volume.min = '0';
+      volume.max = '1';
+      volume.step = '0.01';
+      volume.value = '0.5';
+
+      const audio = new Audio(sound.src);
+      audio.loop = true;
+      audio.volume = 0.5 * masterVolume;
+
+      button.onclick = () => {
+        if (audio.paused) {
+          audio.play();
+          button.textContent = 'Pause';
+        } else {
+          audio.pause();
+          button.textContent = 'Play';
+        }
+      };
+
+      volume.oninput = () => {
+        audio.volume = volume.value * masterVolume;
+      };
+
+      card.appendChild(icon);
+      card.appendChild(title);
+      card.appendChild(button);
+      card.appendChild(volume);
+
+      document.getElementById('mixer').appendChild(card);
     }
-  };
 
-  volume.oninput = () => {
-    audio.volume = volume.value * masterVolume;
-  };
+    function toggleTheme() {
+      if (document.documentElement.getAttribute('data-theme') === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    }
 
-  card.appendChild(icon);
-  card.appendChild(title);
-  card.appendChild(button);
-  card.appendChild(volume);
-  card.appendChild(nowPlaying);
+    function setMasterVolume(val) {
+      masterVolume = val;
+      const sliders = document.querySelectorAll('.sound input[type=range]');
+      sliders.forEach(slider => {
+        const event = new Event('input');
+        slider.dispatchEvent(event);
+      });
+    }
 
-  document.getElementById('mixer').appendChild(card);
-}
-
-function toggleTheme() {
-  if (document.documentElement.getAttribute('data-theme') === 'dark') {
-    document.documentElement.removeAttribute('data-theme');
-  } else {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  }
-}
-
-function setMasterVolume(val) {
-  masterVolume = val;
-  const sliders = document.querySelectorAll('.volume');
-  sliders.forEach(slider => {
-    const event = new Event('input');
-    slider.dispatchEvent(event);
-  });
-}
-
-sounds.forEach(createSoundCard);
-</script>
-
+    sounds.forEach(createSoundCard);
+  </script>
 </body>
 </html>
