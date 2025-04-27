@@ -66,7 +66,7 @@
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
       width: 90%;
-      max-width: 1200px;
+      max-width: 1500px;
       animation: fadeInUp 1.2s ease forwards;
     }
 
@@ -180,6 +180,7 @@
     }
   </style>
 </head>
+
 <body>
 
 <header>
@@ -192,95 +193,118 @@
   <input type="range" min="0" max="1" step="0.01" value="0.5" class="master-volume" onchange="setMasterVolume(this.value)">
 </div>
 
-<div class="mixer">
-  <div class="sound" id="rain">
-    <div class="icon">🌧️</div>
-    <h3>Rain</h3>
-    <button onclick="togglePlay('rain')">Play/Pause</button>
-    <input type="range" min="0" max="1" step="0.01" class="volume" onchange="setVolume('rain', this.value)">
-    <div class="now-playing" id="status-rain"></div>
-  </div>
-  <div class="sound" id="coffee">
-    <div class="icon">☕</div>
-    <h3>Coffee Shop</h3>
-    <button onclick="togglePlay('coffee')">Play/Pause</button>
-    <input type="range" min="0" max="1" step="0.01" class="volume" onchange="setVolume('coffee', this.value)">
-    <div class="now-playing" id="status-coffee"></div>
-  </div>
-  <div class="sound" id="fireplace">
-    <div class="icon">🔥</div>
-    <h3>Fireplace</h3>
-    <button onclick="togglePlay('fireplace')">Play/Pause</button>
-    <input type="range" min="0" max="1" step="0.01" class="volume" onchange="setVolume('fireplace', this.value)">
-    <div class="now-playing" id="status-fireplace"></div>
-  </div>
-  <div class="sound" id="forest">
-    <div class="icon">🌲</div>
-    <h3>Forest Wind</h3>
-    <button onclick="togglePlay('forest')">Play/Pause</button>
-    <input type="range" min="0" max="1" step="0.01" class="volume" onchange="setVolume('forest', this.value)">
-    <div class="now-playing" id="status-forest"></div>
-  </div>
-  <div class="sound" id="ocean">
-    <div class="icon">🌊</div>
-    <h3>Ocean Waves</h3>
-    <button onclick="togglePlay('ocean')">Play/Pause</button>
-    <input type="range" min="0" max="1" step="0.01" class="volume" onchange="setVolume('ocean', this.value)">
-    <div class="now-playing" id="status-ocean"></div>
-  </div>
-  <div class="sound" id="night">
-    <div class="icon">🌌</div>
-    <h3>Night Crickets</h3>
-    <button onclick="togglePlay('night')">Play/Pause</button>
-    <input type="range" min="0" max="1" step="0.01" class="volume" onchange="setVolume('night', this.value)">
-    <div class="now-playing" id="status-night"></div>
-  </div>
+<div class="mixer" id="mixer">
+  <!-- All the sounds will be generated here by JavaScript -->
 </div>
 
 <script>
-const sounds = {
-  rain: new Audio('https://cdn.pixabay.com/download/audio/2021/08/08/audio_13a3c1b9ec.mp3?filename=rain-ambient-101062.mp3'),
-  coffee: new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_7b8a0d2b70.mp3?filename=coffee-shop-background-ambient-21354.mp3'),
-  fireplace: new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_75f62b38e3.mp3?filename=fireplace-crackling-21347.mp3'),
-  forest: new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_5b2f18e3e5.mp3?filename=forest-wind-ambience-21341.mp3'),
-  ocean: new Audio('https://cdn.pixabay.com/download/audio/2022/02/24/audio_747f2b6c57.mp3?filename=calm-ocean-waves-ambient-16960.mp3'),
-  night: new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_720218aa97.mp3?filename=night-forest-crickets-ambience-21336.mp3')
-};
+const sounds = [
+  { name: "Rain", icon: "🌧️", src: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c506c4b97b.mp3" },
+  { name: "Thunderstorm", icon: "⛈️", src: "https://cdn.pixabay.com/download/audio/2022/02/22/audio_6455c8d53e.mp3" },
+  { name: "Forest Birds", icon: "🐦", src: "https://cdn.pixabay.com/download/audio/2021/09/20/audio_b7f8fb31df.mp3" },
+  { name: "Campfire", icon: "🔥", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_5e4d5eb2c8.mp3" },
+  { name: "Ocean Waves", icon: "🌊", src: "https://cdn.pixabay.com/download/audio/2021/09/30/audio_5fcd6e5c7a.mp3" },
+  { name: "Wind Blowing", icon: "💨", src: "https://cdn.pixabay.com/download/audio/2022/07/16/audio_b57a97dc0b.mp3" },
+  { name: "River Stream", icon: "🏞️", src: "https://cdn.pixabay.com/download/audio/2022/03/23/audio_c2d556d0b8.mp3" },
+  { name: "Birdsong Morning", icon: "🌄", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_616923b9aa.mp3" },
+  { name: "Cafe Chatter", icon: "☕", src: "https://cdn.pixabay.com/download/audio/2022/04/06/audio_b0162e0ee8.mp3" },
+  { name: "Typing Keyboard", icon: "⌨️", src: "https://cdn.pixabay.com/download/audio/2022/10/07/audio_33058d7d93.mp3" },
+  { name: "City Streets", icon: "🚦", src: "https://cdn.pixabay.com/download/audio/2022/01/19/audio_2f23e50709.mp3" },
+  { name: "Train Ride", icon: "🚂", src: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_2f26c13833.mp3" },
+  { name: "Subway", icon: "🚇", src: "https://cdn.pixabay.com/download/audio/2022/05/04/audio_650ec7b50b.mp3" },
+  { name: "Wind Chimes", icon: "🔔", src: "https://cdn.pixabay.com/download/audio/2022/03/19/audio_2e0105d01d.mp3" },
+  { name: "Clock Ticking", icon: "🕰️", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_9c458e4c7e.mp3" },
+  { name: "Meditation Bells", icon: "🧘", src: "https://cdn.pixabay.com/download/audio/2022/03/19/audio_a6c57d4a18.mp3" },
+  { name: "Chanting", icon: "🙏", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_6cb278e41e.mp3" },
+  { name: "Cave Drips", icon: "🕳️", src: "https://cdn.pixabay.com/download/audio/2022/07/24/audio_604d1f7b58.mp3" },
+  { name: "Fireplace", icon: "🪵", src: "https://cdn.pixabay.com/download/audio/2021/09/18/audio_816ed719c5.mp3" },
+  { name: "Leaves Rustling", icon: "🍂", src: "https://cdn.pixabay.com/download/audio/2021/09/10/audio_b9d4b048d4.mp3" },
+  { name: "Soft Wind", icon: "🌬️", src: "https://cdn.pixabay.com/download/audio/2022/02/22/audio_c7f3c67c1e.mp3" },
+  { name: "Bubbling Water", icon: "🫧", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_1b7ba769f6.mp3" },
+  { name: "Jungle Sounds", icon: "🦜", src: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_c77b2e4953.mp3" },
+  { name: "Mountain Wind", icon: "🏔️", src: "https://cdn.pixabay.com/download/audio/2022/06/14/audio_b1eac5c2b3.mp3" },
+  { name: "Aurora Ambience", icon: "🌌", src: "https://cdn.pixabay.com/download/audio/2021/09/20/audio_b927c13c34.mp3" },
+  { name: "Seagulls", icon: "🕊️", src: "https://cdn.pixabay.com/download/audio/2021/08/08/audio_503f77c3e5.mp3" },
+  { name: "Farm Morning", icon: "🌾", src: "https://cdn.pixabay.com/download/audio/2021/10/28/audio_dcf11fba0e.mp3" },
+  { name: "Tropical Rain", icon: "🌴", src: "https://cdn.pixabay.com/download/audio/2022/01/19/audio_6b84d6c48f.mp3" },
+  { name: "Underwater", icon: "🐠", src: "https://cdn.pixabay.com/download/audio/2022/01/19/audio_c3d3c00411.mp3" },
+  { name: "Deep Cave", icon: "🕳️", src: "https://cdn.pixabay.com/download/audio/2022/06/14/audio_437c7476f6.mp3" }
+];
 
-for (let key in sounds) {
-  sounds[key].loop = true;
-  sounds[key].volume = 0.5;
-}
+let masterVolume = 0.5;
 
-function togglePlay(sound) {
-  const status = document.getElementById(`status-${sound}`);
-  if (sounds[sound].paused) {
-    sounds[sound].play();
-    status.textContent = "Now Playing 🎵";
-  } else {
-    sounds[sound].pause();
-    status.textContent = "";
-  }
-}
+function createSoundCard(sound) {
+  const card = document.createElement('div');
+  card.className = 'sound';
+  
+  const icon = document.createElement('div');
+  icon.className = 'icon';
+  icon.textContent = sound.icon;
+  
+  const title = document.createElement('h3');
+  title.textContent = sound.name;
+  
+  const button = document.createElement('button');
+  button.textContent = 'Play';
+  
+  const volume = document.createElement('input');
+  volume.type = 'range';
+  volume.min = '0';
+  volume.max = '1';
+  volume.step = '0.01';
+  volume.value = '0.5';
+  volume.className = 'volume';
 
-function setVolume(sound, volume) {
-  sounds[sound].volume = volume;
-}
+  const nowPlaying = document.createElement('div');
+  nowPlaying.className = 'now-playing';
 
-function setMasterVolume(volume) {
-  for (let key in sounds) {
-    sounds[key].volume = volume;
-  }
+  const audio = new Audio(sound.src);
+  audio.loop = true;
+  audio.volume = 0.5 * masterVolume;
+
+  button.onclick = () => {
+    if (audio.paused) {
+      audio.play();
+      button.textContent = 'Pause';
+      nowPlaying.textContent = 'Playing...';
+    } else {
+      audio.pause();
+      button.textContent = 'Play';
+      nowPlaying.textContent = '';
+    }
+  };
+
+  volume.oninput = () => {
+    audio.volume = volume.value * masterVolume;
+  };
+
+  card.appendChild(icon);
+  card.appendChild(title);
+  card.appendChild(button);
+  card.appendChild(volume);
+  card.appendChild(nowPlaying);
+
+  document.getElementById('mixer').appendChild(card);
 }
 
 function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
-  if (currentTheme === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'light');
+  if (document.documentElement.getAttribute('data-theme') === 'dark') {
+    document.documentElement.removeAttribute('data-theme');
   } else {
     document.documentElement.setAttribute('data-theme', 'dark');
   }
 }
+
+function setMasterVolume(val) {
+  masterVolume = val;
+  const sliders = document.querySelectorAll('.volume');
+  sliders.forEach(slider => {
+    const event = new Event('input');
+    slider.dispatchEvent(event);
+  });
+}
+
+sounds.forEach(createSoundCard);
 </script>
 
 </body>
